@@ -1,0 +1,9 @@
+{block content}
+
+<h2>Kategorie surovin</h1>
+
+<ul>
+<li n:foreach="$categories as $category">
+    <a n:href="Ingredient:showCategory $category->id_ingredient_category">{$category->name}</a>
+</li>
+</ul>

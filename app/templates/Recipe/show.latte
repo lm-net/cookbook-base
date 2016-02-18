@@ -1,0 +1,64 @@
+{block content}
+
+{snippet data}
+
+    {if $edit}
+        {include form.latte}
+    {else}
+
+        <div>
+            <a n:href="edit!" class="ajax pure-button">Editovat</a>
+            &nbsp;
+            <a n:href="delete $recipe->id_recipe" class="ajax pure-button">Smazat</a>
+        </div>
+
+        <h1>{$recipe->name}</h1>
+
+        <div class="pure-g">
+            <div class="pure-u-1-2">Zdroj: <a n:if="$recipe->id_source" n:href="Source:show $recipe->id_source">{$recipe->source->name}</a></div>
+            <div class="pure-u-1-2">Kategorie: 
+                {foreach $recipe->related('recipe_category') as $category}
+                    <a n:href="Recipe:showCategory $category->id_recipe_category">{$category->recipe_category->name}</a>
+                {/foreach}
+            </div>
+        </div>
+
+        <div class="pure-g">
+            <div class="pure-u-1-2">Doba přípravy: {$recipe->cooking_time}</div>
+            <div class="pure-u-1-2">Počet porcí: {$recipe->number_of_servings}</div>
+        </div>
+
+        <div class="pure-g">
+            <div class="pure-u-1-2">{$recipe->cooked_flag ? 'Vyzkoušeno' : 'Nevyzkoušeno'} / {$recipe->vegetarian_flag ? 'Vegetariánské' : 'Obsahuje maso'} {$recipe->todo_flag ? ' / Vyzkoušet' : ''}</div>
+            <div class="pure-u-1-2"><span class="rateit ajax" data-idrecipe="{$recipe->id_recipe}" data-rateit-value="{$recipe->rating}"></span></div>
+        </div>
+
+        <h2>Postup</h2>
+        {foreach explode("\n", $recipe->directions) as $paragraph}
+            <p>{$paragraph}</p>
+        {/foreach}
+
+        {if $recipe->comments}
+            <h2>Komentáře</h2>
+            {foreach explode("\n", $recipe->comments) as $paragraph}
+                <p>{$paragraph}</p>
+            {/foreach}
+        {/if}
+
+        {if $recipe->additional_comments}
+            <h2>Postřehy</h2>
+            {foreach explode("\n", $recipe->additional_comments) as $paragraph}
+                <p>{$paragraph}</p>
+            {/foreach}
+        {/if}
+
+        <h2>Suroviny</h2>
+        <ul>
+            {foreach $recipe->related('ingredient')->order('row_order, id_recipe_ingredient') as $ingredient}
+                <li>{$ingredient->amount} {$ingredient->unit} <a n:href="Ingredient:show $ingredient->id_ingredient">{$ingredient->ingredient->name}</a><span n:if="$ingredient->comments"> ({$ingredient->comments})</span></li>
+                {/foreach}
+        </ul>
+    {/if}
+
+{/snippet}
+

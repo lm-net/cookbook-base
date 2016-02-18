@@ -1,0 +1,115 @@
+{form recipeForm}
+    {input submit} {input cancel}
+    <h1>{input name}</h1>
+        <h2>{input original_name}</h2>
+    <div class="pure-control-group">
+        {input id_source}
+    </div>
+    <div class="pure-control-group">
+        {input cooking_time}
+        {input number_of_servings}
+    </div>
+    <div class="pure-control-group">
+        {input cooked_flag}
+        {input vegetarian_flag}
+        {input todo_flag}
+        {input confirmed_flag}
+    </div>
+    <div class="pure-control-group">
+        {input directions}
+    </div>
+    <div class="pure-control-group">
+        {input comments}
+    </div>
+    <div class="pure-control-group">
+        {input additional_comments}
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#myTags").tagit({
+                showAutocompleteOnFocus: true,
+                placeholderText: "kategorie",
+                fieldName: "categories[]",
+                tagSource: function (search, showChoices) {
+                    $.ajax({
+                        url: "/recipe/categories",
+                        data: search,
+                        success: function (choices) {
+                            showChoices(choices);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+    <ul id="myTags">
+        {if !$add}
+            <!-- Existing list items will be pre-added to the tags -->
+            <li n:foreach="$recipe->related('recipe_category') as $category">{$category->recipe_category->name}</li>
+            {/if}
+    </ul>
+
+    <script>
+        $(function () {
+            $(".sortable").sortable();
+        });
+    </script>
+
+    <script>
+        $(function () {
+            $('#ingredient-list').on("keydown", "li:last input:last", function (e) {
+                if (e.keyCode === 9) {
+                    //var newNode= $('#ingredient-list li:first').clone(true).show();
+                    $("#ingredient-list").append('<li class="ui-state-default ui-sortable-handle"><input type="text" style="width:80px" name="amount[]" value="" placeholder="množství"> <input type="text" style="width:120px" name="unit[]" value="" placeholder="jednotka"> <input class="c-ingredient" type="text" style="width:330px" name="ingredient[]" value="" placeholder="surovina"> <input type="text" style="width:300px" name="ingredient_comments[]" value="" placeholder="poznámka"> <a class="delete-row pure-button">smazat</a></li>');
+                    $('.c-ingredient').typeahead('destroy');
+                    typeahead_init();
+                    newNode.focus();
+                }
+            });
+            
+            typeahead_init();
+        });
+
+        $(function () {
+            $('#ingredient-list').on("click", ".delete-row", function (e) {
+                if ($("#ingredient-list").children("li").length > 1) {
+                    $(e.target).parent().remove();
+                }
+            })
+        });
+    </script>
+
+    <h2>Suroviny</h2>
+    <ul class="sortable ui-sortable" style="list-style-type: none" id="ingredient-list">
+        {if !$add}
+            {foreach $recipe->related('ingredient')->order('row_order, id_recipe_ingredient') as $ingredient}
+                <li class="ui-sortable-handle ui-state-default">
+                    <input type="text" value="{$ingredient->amount}" name="amount[]" placeholder="množství" style="width:80px"/>
+                    <input type="text" value="{$ingredient->unit}" name="unit[]" placeholder="jednotka" style="width:120px"/>
+                    <input type="text" value="{$ingredient->ingredient->name}" placeholder="surovina" name="ingredient[]" class="c-ingredient" style="width:330px"/>
+                    <input type="text" value="{$ingredient->comments}" name="ingredient_comments[]" placeholder="poznámky" style="width:300px"/>
+                    <a class="delete-row pure-button">smazat</a>
+                </li>
+            {/foreach}
+            {if $recipe->related('ingredient')->count() == 0}
+                <li class="ui-sortable-handle ui-state-default">
+                    <input type="text" value="" name="amount[]" placeholder="množství" style="width:80px"/>
+                    <input type="text" value="" name="unit[]" placeholder="jednotka" style="width:120px"/>
+                    <input type="text" value="" name="ingredient[]" placeholder="surovina" class="c-ingredient" style="width:330px"/>
+                    <input type="text" value="" name="ingredient_comments[]" placeholder="poznámky" style="width:300px"/>
+                    <a class="delete-row pure-button">smazat</a>
+                </li>   
+            {/if}
+        {else}
+            <li class="ui-sortable-handle ui-state-default">
+                <input type="text" value="" name="amount[]" placeholder="množství" style="width:80px"/>
+                <input type="text" value="" name="unit[]" placeholder="jednotka" style="width:120px"/>
+                <input type="text" value="" name="ingredient[]" placeholder="surovina" class="c-ingredient" style="width:330px"/>
+                <input type="text" value="" name="ingredient_comments[]" placeholder="poznámky" style="width:300px"/>
+                <a class="delete-row pure-button">smazat</a>
+            </li>    
+        {/if}
+    </ul>
+{/form}

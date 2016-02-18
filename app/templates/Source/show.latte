@@ -1,0 +1,29 @@
+{block content}
+
+{snippet data}
+    {if $edit}
+        {include form.latte}
+    {else}
+        <div>
+            <a n:href="edit!" class="ajax pure-button">Editovat</a>
+            &nbsp;
+            {if $recipes->count() == 0}
+                <a n:href="delete $source->id_source" class="ajax pure-button">Smazat</a>
+            {/if}
+        </div>
+        <h1>{$source->name}{if $source->original} [{$source->original}]{/if}</h1>
+        <h2>{$source->author}</h2>
+        <h3>{$source->publisher}</h3>
+        <p>{$source->comment}</p>
+    {/if}
+{/snippet}
+
+<h2>Recepty</h2>
+<div class="pure-g">
+    {foreach $recipes as $recipe}
+        <div class="pure-u-1-4 ingredient-box">
+            <img width="111" height="63" src="/images/default_food.jpg">
+            <a n:href="Recipe:show $recipe->id_recipe">{$recipe->name}</a>
+        </div>
+    {/foreach}
+</div>

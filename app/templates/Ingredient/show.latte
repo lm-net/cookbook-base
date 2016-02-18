@@ -1,0 +1,59 @@
+{block content}
+
+{snippet data}
+
+    {if $edit}
+        {form ingredientForm}
+            {input submit} {input cancel}
+            <h1>{input name}</h1>
+            <p>
+                <span class="cb-translation">{input english_name}</span>
+                <span class="cb-translation">{input italian_name}</span>
+            </p>
+            <div class="pure-control-group">
+                {input id_ingredient_category}
+            </div>
+            <div class="pure-control-group">
+                {input description}
+            </div>
+        {/form}
+    {else}
+        {if $merge}
+            {form ingredientMergeForm}
+                {input submit} {input cancel}
+                {input id_ingredient}
+                {input id_ingredient_merge_with}
+            {/form}
+        {else}
+        <div>
+            <a n:href="edit!" class="ajax pure-button">Editovat</a>
+            <a n:href="merge!" class="ajax pure-button">Sloučit</a>
+        </div>
+        {/if}
+
+        <h1>{$ingredient->name|firstUpper}</h1>
+        {if $ingredient->english_name || $ingredient->italian_name}
+            <p>
+                <span n:if="$ingredient->english_name" class="cb-translation">en: {$ingredient->english_name}</span>
+                <span n:if="$ingredient->italian_name" class="cb-translation">it: {$ingredient->italian_name}</span>
+            </p>
+        {/if}
+
+        {if $ingredient->id_ingredient_category}
+            <p><a n:href="Ingredient:listByCategory $ingredient->id_ingredient_category">{$ingredient->ingredient_category->name}</a></p>
+            {/if}
+
+        <p n:if="$ingredient->description">{$ingredient->description}</p>
+    {/if}
+
+{/snippet}
+
+<h2>Recepty</h2>
+<div class="pure-g">
+    {foreach $recipes->order('recipe.name') as $recipe}
+        <div class="pure-u-1-4 ingredient-box">
+            <img width="111" height="63" src="http://ichef.bbci.co.uk/food/ic/food_16x9_111/foods/default_16x9.jpg">
+            <a n:href="Recipe:show $recipe->id_recipe">{$recipe->recipe->name}</a>
+        </div>
+    {/foreach}
+</div>

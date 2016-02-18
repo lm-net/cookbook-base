@@ -1,0 +1,24 @@
+{block content}
+
+{include navigation.latte}
+
+<div class="pure-menu pure-menu-open pure-menu-horizontal">
+    <ul>
+        {foreach $categories as $category}
+            <li n:class="$name == $category->name ? pure-menu-selected"><a n:href="Ingredient:listByCategory $category->id_ingredient_category">{$category->name}</a></li>
+            {/foreach}
+    </ul>
+</div>
+
+<div class="pure-g ingredient-table">
+    <div class="pure-u-1-8"><h2 class="ingredient-heading">{$name}</h2><p>{$ingredients->count()} surovin</p></div>
+            {foreach $ingredients as $ingredient}
+                {if $iterator->counter % 7 == 1 and $iterator->counter > 1}
+            <div class="pure-u-1-8"/>
+        {/if}
+        <div class="pure-u-1-8 ingredient-box">
+            <img width="111" height="63" src="/images/default_food.jpg">
+            <a n:href="Ingredient:show $ingredient->id_ingredient">{$ingredient->name}</a> <span class="recipe-count">({$ingredient->cnt})</span>
+        </div>
+    {/foreach}
+</div>

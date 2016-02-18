@@ -1,0 +1,9 @@
+<div>
+    <a n:href="add" class="pure-button">Nová surovina</a>
+</div>
+
+<div class="ingredient-nav">
+    <a n:href="listByName" n:class="$presenter->isLinkCurrent('Ingredient:listByName') ? 'pure-button-primary pure-button' : 'pure-button'">Podle názvu</a>
+    &nbsp;
+    <a n:href="listByCategory" n:class="$presenter->isLinkCurrent('Ingredient:listByCategory') ? 'pure-button-primary pure-button' : 'pure-button'">Podle kategorie</a>
+</div>

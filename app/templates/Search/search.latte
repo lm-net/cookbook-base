@@ -1,0 +1,11 @@
+{block content}
+
+<p>Hledání výrazu <strong>{$term}</strong></p>
+
+<h2>Recepty</h2>
+
+<ul>
+<li n:foreach="$recipes as $recipe">
+    <a n:href="Recipe:show $recipe->id_recipe">{$recipe->name}</a>
+</li>
+</ul>

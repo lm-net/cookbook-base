@@ -1,0 +1,82 @@
+{**
+ * @param string   $basePath web base path
+ * @param array    $flashes  flash messages
+*}
+
+<!DOCTYPE html>
+<html lang="cs">
+    <head>
+        <meta charset="utf-8">
+
+        <title>{ifset #title}{include title|striptags} | {/ifset}The Cookery Bible</title>
+
+        <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">        
+        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
+
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">        
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,latin-ext">
+
+        <link rel="stylesheet" href="{$basePath}/css/cb.css">        
+        <link rel="stylesheet" href="{$basePath}/css/jquery.tagit.css">
+        <link rel="stylesheet" href="{$basePath}/css/rateit.css">
+
+        <link rel="shortcut icon" href="{$basePath}/favicon.ico">
+
+        <script> document.documentElement.className += ' js'</script>
+
+        {block scripts}
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+
+        <script src="{$basePath}/js/netteForms.js"></script>
+        <script src="{$basePath}/js/nette.ajax.js"></script>
+        <script src="{$basePath}/js/main.js"></script>
+        <script src="{$basePath}/js/tag-it.js"></script>
+        <script src="{$basePath}/js/typeahead.bundle.js"></script>
+        <script src="{$basePath}/js/jquery.rateit.min.js"></script>
+        {/block}
+
+        {block head}{/block}
+    </head>
+
+    <body id="page">
+
+        <nav>
+            <div class="header">
+                <div class="home-menu pure-menu pure-menu-open pure-menu-horizontal pure-menu-fixed">
+                    <a class="pure-menu-heading" n:href="Homepage:default">The Cookery Bible</a>
+
+                    <ul>
+                        <li><a n:href="Recipe:add">Nový recept</a></li>
+                        <li n:class="$presenter->isLinkCurrent('Recipe:*') ? pure-menu-selected"><a n:href="Recipe:list">Recepty</a></li>
+                        <li n:class="$presenter->isLinkCurrent('Ingredient:*') ? pure-menu-selected"><a n:href="Ingredient:list">Suroviny</a></li>
+                        <li n:class="$presenter->isLinkCurrent('Source:*') ? pure-menu-selected"><a n:href="Source:list">Kuchařky</a></li>
+                        <li>
+                            {form searchForm}
+                                {input term}
+                                <button class="pure-button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            {/form}
+                        </li>
+                        <li><a href="#">Odhlásit se</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="content-wrapper">
+            <div class="content">
+                {snippet flashMessages}
+                    <div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
+                {/snippet}
+
+                {include content}
+            </div>
+            <div class="footer l-box is-center">
+                2014 &copy; Luboš & Terezka & Anička
+            </div>
+        </div>
+
+    </body>
+</html>

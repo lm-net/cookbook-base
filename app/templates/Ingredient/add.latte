@@ -1,0 +1,16 @@
+{block content}
+
+{form ingredientForm}
+{input submit} <a n:href="Ingredient:list" class="pure-button">Zrušit</a>
+<h1>{input name}</h2>
+<p>
+<span class="cb-translation">{input english_name}</span>
+<span class="cb-translation">{input italian_name}</span>
+</p>
+<div class="pure-control-group">
+{input id_ingredient_category}
+</div>
+<div class="pure-control-group">
+{input description}
+</div>
+{/form}

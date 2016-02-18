@@ -1,0 +1,13 @@
+{block content}
+
+<div>
+    <a n:href="add" class="pure-button">Nová kuchařka</a>
+</div>
+
+<h1>Kuchařky</h1>
+<div class="pure-g">
+    <div class="pure-u-1-2" n:foreach="$sources as $source">
+        <h2><a n:href="Source:show $source->id_source">{$source->name}</a></h2>{if $source->author}<h3>[{$source->author}]</h3>{/if}
+    </div>
+</div>
+
